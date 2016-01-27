@@ -6,15 +6,17 @@
  * Time: 11:38
  */
 
-//namespace
+namespace Chall\BrFormat;
 
-class BrFormat {
+class BrFormat
+{
 
-    public static  function maskCpf_Cnpj($value) {
+    public static function maskcpfCnpj($value)
+    {
         // pega o tamanho da string menos os digitos verificadores
         $tamanho = (strlen($value) -2);
         //verifica se o tamanho do código informado é válido
-        if ($tamanho != 9 && $tamanho != 12){
+        if ($tamanho != 9 && $tamanho != 12) {
             return false;
         }
 
@@ -23,42 +25,51 @@ class BrFormat {
 
         $indice = -1;
         for ($i=0; $i < strlen($mascara); $i++) {
-            if ($mascara[$i]=='#') $mascara[$i] = $value[++$indice];
+            if ($mascara[$i]=='#') {
+                $mascara[$i] = $value[++$indice];
+            }
         }
 
         return $mascara;
     }
 
-    public static function maskCpf($value) {
-        return self::maskCpf_Cnpj($value);
+    public static function maskCpf($value)
+    {
+        return self::maskcpfCnpj($value);
     }
 
-    public static function cleanCpf($value) {
+    public static function cleanCpf($value)
+    {
         return self::getOnlyNum($value);
     }
 
-    public static function maskCnpj($value) {
-        return self::maskCpf_Cnpj($value);
+    public static function maskCnpj($value)
+    {
+        return self::maskcpfCnpj($value);
     }
 
-    public static function cleanCnpj($value) {
+    public static function cleanCnpj($value)
+    {
         return preg_replace('#[^0-9]#', '', $value);
     }
 
-    public static function getOnlyNum($value) {
+    public static function getOnlyNum($value)
+    {
         return preg_replace('#[^0-9]#', '', $value);
     }
 
-    public static function maskDateHour($value, $mask = 'd/m/Y') {
+    public static function maskDateHour($value, $mask = 'd/m/Y')
+    {
         $date = new DateTime($value);
         return $date->format($mask);
     }
 
-    public static function maskPhone($value) {
+    public static function maskPhone($value)
+    {
         $formatted = '';
-        if($value != null ) {
+        if ($value != null) {
             $ddd = substr($value, 0, 2);
-            if(strlen($value) == 11) {
+            if (strlen($value) == 11) {
                 //prefix with 9....
                 $prefix = substr($value, 2, 5);
                 $number = substr($value, 7);
@@ -73,7 +84,8 @@ class BrFormat {
         return $formatted;
     }
 
-    public static function getMaritalOptions() {
+    public static function getMaritalOptions()
+    {
         return $opt = array(
             'casado' => 'Casado(a)',
             'separado' => 'Separado(a)',
@@ -83,7 +95,8 @@ class BrFormat {
         );
     }
 
-    public static function getStateOptions() {
+    public static function getStateOptions()
+    {
         return array(
             'AC' => 'AC',
             'AL' => 'AL',
@@ -115,7 +128,8 @@ class BrFormat {
         );
     }
 
-    public static function getMonths() {
+    public static function getMonths()
+    {
         return $months = array(
             '01' => 'Janeiro',
             '02' => 'Fevereiro',
@@ -133,7 +147,8 @@ class BrFormat {
         );
     }
 
-    public static function getBloodOptions() {
+    public static function getBloodOptions()
+    {
         return $opt = array(
             'A' => 'A',
             'B' => 'B',
@@ -142,15 +157,17 @@ class BrFormat {
         );
     }
 
-    public static function getBloodSignalOptions() {
+    public static function getBloodSignalOptions()
+    {
         return $opt = array(
             '+' => '+',
             '-' => '-'
         );
     }
 
-    public static function joinName($entity, $format = 'normal') {
-        if(!isset($entity)) {
+    public static function joinName($entity, $format = 'normal')
+    {
+        if (!isset($entity)) {
             //TODO: tratar com exception
             return false;
         }
@@ -158,7 +175,7 @@ class BrFormat {
         $first = $entity['first_name'];
         $middle = $entity['middle_name'];
         $last = $entity['last_name'];
-        if(!empty($middle)) {
+        if (!empty($middle)) {
             $first .= ' ' . $middle;
         }
         switch($format) {
@@ -172,7 +189,8 @@ class BrFormat {
         return $name;
     }
 
-    public static function formatName($name, $encoding = 'utf-8') {
+    public static function formatName($name, $encoding = 'utf-8')
+    {
         $arrayName = explode(' ', $name); //Retorna uma matriz de strings da variavel nome, separando pelos espacos
         $sizeArray = count($arrayName);  //Conta a quantidade de elementos do array
         $arrayConnectors = array('', 'da', 'de', 'di', 'do', 'du', 'das', 'dos', 'e');
@@ -182,12 +200,12 @@ class BrFormat {
             $temp = $arrayName[$cont];
             $temp = mb_strtolower($temp, $encoding);
 
-            if (array_search($temp, $arrayConnectors) == null)
+            if (array_search($temp, $arrayConnectors) == null) {
                 $formattedName .= ucfirst($temp) . " ";
-            else
+            } else {
                 $formattedName .= $temp . " ";
+            }
         }
         return(trim($formattedName));
     }
-
 }
