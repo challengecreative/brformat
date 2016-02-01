@@ -8,6 +8,8 @@
 
 namespace Chall\BrFormat;
 
+use DateTime;
+
 class BrFormat
 {
 
